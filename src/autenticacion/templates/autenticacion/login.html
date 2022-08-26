@@ -1,0 +1,23 @@
+{% extends 'gym/base.html' %}
+
+{% block contenido %}
+
+<br>
+<center> 
+{% if error %}
+    <p style="color: red">{{error}}</p>
+{% endif %}
+</center>
+
+<br>
+<center> 
+<form method="post">{% csrf_token %}
+
+    {{ form.as_p }}
+
+    <input type="submit" value="Iniciar sesion">
+</form>
+</center>
+
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'gym/base.html' %}
+
+{% block titulo %} Socios {% endblock %}
+
+{% block welcome %} Socios {% endblock %}
+
+
+<br>
+<center>    
+    {% for socio in socios %}
+        <p><strong>{{socio.nombre}}</strong> - {{socio.apellido}} - {{socio.email}}</p>
+    {%endfor%}
+</center>
+
+{% endblock contenido %}

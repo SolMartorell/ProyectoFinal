@@ -1,0 +1,16 @@
+{% extends 'gym/base.html' %}
+
+{% block titulo %} Planes {% endblock %}
+
+{% block welcome %} Planes {% endblock %}
+
+
+{% block contenido %}
+<br>
+<center>
+    <p>Nombre: {{planes.nombre}}</p>
+    <p>Cantidad clases: {{planes.cantidad_clases}}</p>
+    <p>Precio: ${{planes.precio}}</p>
+
+</center>
+{% endblock contenido %}

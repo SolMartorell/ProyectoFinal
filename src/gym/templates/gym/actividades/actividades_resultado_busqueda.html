@@ -1,0 +1,16 @@
+{% extends 'gym/base.html' %}
+
+
+{% block titulo %} Actividades {% endblock %}
+
+{% block welcome %} Actividades {% endblock %}
+
+{% block contenido %}
+<br>
+<center>    
+    {% for actividad in actividades %}
+        <p><strong>{{actividad.nombre}}</strong> - {{actividad.dia}} - {{actividad.horario}} hs</p>
+    {%endfor%}
+</center>
+
+{% endblock contenido %}

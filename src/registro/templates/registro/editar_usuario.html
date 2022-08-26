@@ -1,0 +1,16 @@
+{% extends 'gym/base.html' %}
+
+
+{% block contenido %}
+<br>
+<center>
+<h1>Editando información de {{request.user.username}}</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="Editar">
+
+</form>
+</center>
+{% endblock %}
