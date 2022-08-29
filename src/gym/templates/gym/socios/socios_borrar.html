@@ -1,22 +1,20 @@
 {% extends 'gym/base.html' %}
 
-
 {% block titulo %} Socios {% endblock %}
 
 {% block welcome %} Socios {% endblock %}
 
-
 {% block contenido %}
+
 <br>
 <center>
-<strong>Editar socios</strong>
-<br>
-<br>
+    
     <form method="post">{% csrf_token %}
 
-        {{ formulario.as_p }}
+        <p>Has borrado el/la socio/a: {{object}}</p>
+        <a href="{% url 'Socios' %}">Volver</a>
 
-        <input type="submit" value="Editar">
     </form>
+
 </center>   
 {% endblock contenido %}

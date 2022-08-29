@@ -1,0 +1,20 @@
+{% extends 'gym/base.html' %}
+
+{% block titulo %} Planes {% endblock %}
+
+{% block welcome %} Planes {% endblock %}
+
+{% block contenido %}
+
+<br>
+<center>
+    
+    <form method="post">{% csrf_token %}
+
+        <p>Has borrado el plan: {{object}}</p>
+        <a href="{% url 'Planes' %}">Volver</a>
+
+    </form>
+
+</center>   
+{% endblock contenido %}

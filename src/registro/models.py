@@ -12,3 +12,15 @@ class Avatar(models.Model):
     class Meta:
         verbose_name = "Avatar"
         verbose_name_plural = "Avatares"
+
+
+class Contacto(models.Model):
+    nombre = models.CharField(max_length=100)
+    email = models.EmailField()
+    mensaje = models.CharField(max_length=300)
+    fecha_creacion = models.DateTimeField(auto_now=True, null=True)
+
+
+    def __str__(self):
+        return f"Mensaje de: {self.nombre}"
+    

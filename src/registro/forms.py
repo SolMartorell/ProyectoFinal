@@ -1,7 +1,6 @@
-from django.forms import Form, CharField, EmailField, PasswordInput, ImageField
+from django.forms import Form, CharField, EmailField, PasswordInput, ImageField, DateTimeField
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-
 
 
 class UserCustomCreationForm(UserCreationForm):
@@ -30,3 +29,10 @@ class UserEditForm(UserCreationForm):
 
 class AvatarForm(Form):
     imagen = ImageField()
+
+
+class ContactoFormulario(Form):
+    nombre = CharField(max_length=100)
+    email = EmailField()
+    mensaje = CharField(max_length=300)
+    fecha_creacion = DateTimeField()

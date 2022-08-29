@@ -8,7 +8,28 @@
 
 <br>
 <center> 
-<p>Contactame</p>
+    <br>
+    {% for contacto in contactos %}
+    <p>Nombre: {{contacto.nombre}}</p>
+    <p>Email: {{contacto.email}}</p>
+    <p>Mensaje: {{contacto.mensaje}}</p>
+    <p>Fecha de envío: {{contacto.fecha_creacion}}</p>
+    <a href="{% url 'borrar_contacto' contacto.id %}">Borrar</a>
+    <br>
+    <br>
+    {% endfor %}
+    <br>
+    <strong>Enviar mensaje</strong>
+    <br>
+    <br>          
+
+    <form method="post"> {% csrf_token %}
+        
+        {{ formulario.as_p }}
+        
+        <input type="submit" value="Enviar">
+    </form>
+ 
 </center>
 
 {% endblock %}

@@ -9,7 +9,7 @@
 <br>
 <center>
     <p>Listado de planes disponibles:</p>
-    {% for plan in planes %}
+    {% for plan in object_list %}
         <p><strong>{{plan.nombre}}</p></strong>
             <a href="{%url 'detalle_plan' plan.id %}">Ver más -</a> 
             <a href="{%url 'borrar_plan' plan.id %}">Borrar -</a> 
@@ -22,7 +22,7 @@
     <form action="{% url 'buscar_plan' %}" method="get">
 
         <p>
-            Indique una nombre:
+            Indique un nombre:
             <input type="text" name="plan">
         </p>
         <input type="submit" value="Buscar">

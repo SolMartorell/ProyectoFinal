@@ -9,7 +9,7 @@
 <br>
 <center>
     <p>Listado de socios inscriptos:</p>
-    {% for socio in socios %}
+    {% for socio in object_list %}
         <p><strong>{{socio.apellido}}, {{socio.nombre}}</p></strong>
             <a href="{%url 'detalle_socio' socio.id %}">Ver más -</a> 
             <a href="{%url 'borrar_socio' socio.id %}">Borrar -</a> 

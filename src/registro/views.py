@@ -3,9 +3,11 @@ from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from registro.forms import UserCustomCreationForm
+from registro.forms import ContactoFormulario, UserCustomCreationForm
 from registro.forms import UserEditForm, AvatarForm
-from registro.models import Avatar
+from registro.models import Avatar, Contacto
+from django.views.generic import CreateView, ListView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def registrarse(request):
@@ -24,16 +26,6 @@ def registrarse(request):
                 "form": formulario
             }
             return render(request, "registro/registrarse.html", context)
-
-
-
-
-
-
-
-def contacto (request):
-    return render(request, "registro/contacto.html")
-
 
 
 @login_required
@@ -64,7 +56,7 @@ def editar_usuario(request):
 
 @login_required
 def agregar_avatar(request):
-
+ 
     if request.method == "GET":
         form = AvatarForm()
         contexto = {"form": form}
@@ -83,3 +75,46 @@ def agregar_avatar(request):
             
         contexto = {"form": form}
         return render(request, "registro/agregar_avatar.html", contexto)
+
+
+@login_required
+def contacto (request):
+    contactos = Contacto.objects.all()
+    
+    if request.method == "GET":
+        formulario = ContactoFormulario()
+
+        context = {
+            "contactos": contactos,
+            "formulario": formulario
+        }
+        return render(request, "registro/contacto.html", context)
+
+    else:
+        formulario = ContactoFormulario(request.POST)
+        if formulario.is_valid():        
+            data = formulario.cleaned_data
+        
+            nombre = data.get("nombre")
+            email = data.get("email")
+            mensaje = data.get("mensaje")
+            fecha_creacion = data.get("fecha_creacion")
+            
+            contacto = Contacto(nombre=nombre, email=email, mensaje=mensaje, fecha_creacion=fecha_creacion)
+            contacto.save()
+
+        formulario = ContactoFormulario()
+        context = {
+            "contacto": contacto,
+            "formulario": formulario
+        }
+        return render(request, "registro/contacto.html", context)
+
+@login_required
+def borrar_contacto(request, id_contacto):
+    try:
+        contacto = Contacto.objects.get(id=id_contacto)
+        contacto.delete()
+        return redirect("Contacto")
+    except:
+        return redirect("Inicio")

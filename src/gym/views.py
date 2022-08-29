@@ -5,9 +5,11 @@ from gym.forms import *
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from registro.models import Avatar
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # INICIO
+
 
 def inicio(request):
 
@@ -133,19 +135,22 @@ class SociosDetail(DetailView):
     model = Socios
     template_name = "gym/socios/socios_detalle.html"
 
-class SociosCreate(CreateView):
+class SociosCreate(LoginRequiredMixin, CreateView):
     model = Socios
-    success_url = "/gym/socios/socios"
+    success_url = "/gym/socios/"
     fields = ["nombre", "apellido", "email", "cuota_paga"]
+    template_name = "gym/socios/socios.html"
 
-class SociosUpdate(UpdateView):
+class SociosUpdate(LoginRequiredMixin, UpdateView):
     model = Socios
-    success_url = "/gym/socios/socios"
+    success_url = "/gym/socios/"
     fields = ["nombre", "apellido", "email", "cuota_paga"]
+    template_name = "gym/socios/socios.html"
 
-class SociosDelete(DeleteView):
+class SociosDelete(LoginRequiredMixin, DeleteView):
     model = Socios
-    success_url = "/gym/socios/socios"
+    success_url = "/gym/socios/"
+    template_name = "gym/socios/socios_borrar.html"
 
 @login_required
 def buscar_socio(request):
@@ -170,19 +175,23 @@ class PlanesDetail(DetailView):
     model = Planes
     template_name = "gym/planes/planes_detalle.html"
 
-class PlanesCreate(CreateView):
+class PlanesCreate(LoginRequiredMixin, CreateView):
     model = Planes
-    success_url = "/gym/planes/planes"
+    success_url = "/gym/planes/"
     fields = ["nombre", "cantidad_clases", "precio"]
+    template_name = "gym/planes/planes.html"
 
-class PlanesUpdate(UpdateView):
+class PlanesUpdate(LoginRequiredMixin, UpdateView):
     model = Planes
-    success_url = "/gym/planes/planes"
+    success_url = "/gym/planes/"
     fields = ["nombre", "cantidad_clases", "precio"]
+    template_name = "gym/planes/planes.html"
 
-class PlanesDelete(DeleteView):
+class PlanesDelete(LoginRequiredMixin, DeleteView):
     model = Planes
-    success_url = "/gym/planes/planes"
+    success_url = "/gym/planes/"
+    template_name = "gym/planes/planes_borrar.html"
+
 
 @login_required
 def buscar_plan(request):
@@ -193,4 +202,4 @@ def buscar_plan(request):
         return HttpResponse("No indicaste ningún nombre")
 
     planes_lista = Planes.objects.filter(nombre__icontains=plan_nombre)
-    return render(request, "gym/planes/planes_resultado_busqueda.html", {"socios": plan_lista})
+    return render(request, "gym/planes/planes_resultado_busqueda.html", {"planes": planes_lista})

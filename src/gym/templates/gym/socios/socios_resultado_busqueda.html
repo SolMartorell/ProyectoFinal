@@ -10,6 +10,7 @@
     {% for socio in socios %}
         <p><strong>{{socio.nombre}}</strong> - {{socio.apellido}} - {{socio.email}}</p>
     {%endfor%}
+    <a href="{% url 'Socios' %}">Volver</a>
 </center>
 
 {% endblock contenido %}
