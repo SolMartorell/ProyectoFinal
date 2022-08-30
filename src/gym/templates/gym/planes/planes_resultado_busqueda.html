@@ -2,16 +2,27 @@
 
 {% block titulo %} Planes {% endblock %}
 
-{% block welcome %} Planes {% endblock %}
+{% block welcome %} <h3 style="color: orangered">Planes</h3> {% endblock %}
 
 
 {% block contenido %}
 <br>
-<center>    
+<center>   
+<p>Resultado de búsqueda para: {{query}}</p>
+
+{% if planes %}
+            
     {% for plan in planes %}
-        <p><strong>{{plan.nombre}}</strong> - {{plan.cantidad_clases}} - ${{plan.precio}}</p>
+    <p><strong>Plan {{plan.nombre}}</strong> - {{plan.cantidad_clases}} clases - Precio: ${{plan.precio}}</p>
     {%endfor%}
-    <a href="{% url 'Planes' %}">Volver</a>
+    
+{% else %}
+    
+    <p><strong>No indicaste un nombre de plan válido</strong></p>
+
+{% endif %}
+
+<a href="{% url 'Planes' %}">Volver</a>
 </center>
 
 {% endblock contenido %}

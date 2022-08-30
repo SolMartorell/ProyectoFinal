@@ -2,12 +2,25 @@
 
 {% block titulo %} Planes {% endblock %}
 
-{% block welcome %} Planes {% endblock %}
+{% block welcome %} <h3 style="color: orangered">Planes</h3> {% endblock %}
 
 {% block contenido %}
 
-<br>
 <center>
+    <br>
+    <strong>Buscar planes</strong>
+    <br>
+    <br>
+    <form action="{% url 'buscar_plan' %}" method="get">
+
+        <p>
+            Indique un plan:
+            <input type="text" name="plan">
+        </p>
+        <input type="submit" value="Buscar">
+        
+    </form>
+    <br>
     <p>Listado de planes disponibles:</p>
     
     {% for plan in planes %}
@@ -18,18 +31,8 @@
             
         </p>
     {% endfor %}
-    <br>
-    <strong>Buscar planes</strong>
-    <form action="{% url 'buscar_plan' %}" method="get">
 
-        <p>
-            Indique un plan:
-            <input type="text" name="nombre">
-        </p>
-        <input type="submit" value="Buscar">
     <br>
-    </form>
-
     <strong>Crear planes</strong>
     <br>
     <br>

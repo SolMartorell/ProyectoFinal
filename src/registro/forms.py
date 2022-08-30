@@ -36,6 +36,11 @@ class AvatarForm(Form):
 class ContactoFormulario(Form):
     nombre = CharField(max_length=100)
     email = EmailField()
-    mensaje = CharField(max_length=300)
+    mensaje = CharField(max_length=500)
+
+
+    class Meta:
+        model = Contacto
+        fields = ["nombre", "email", "mensaje"]
  
 

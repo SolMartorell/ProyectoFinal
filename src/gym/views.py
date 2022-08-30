@@ -12,25 +12,25 @@ from django.contrib.auth.decorators import login_required
 
 def inicio(request):
 
-    context = {
+    contexto = {
         "mensaje": "Página de inicio"    
     }
 
     if not request.user.is_anonymous:
         avatares = Avatar.objects.filter(usuario = request.user).last()
-        context.update({"avatares": avatares})
+        contexto.update({"avatares": avatares})
 
-    return render(request, "gym/index.html", context)
+    return render(request, "gym/index.html", contexto)
 
 # SOBRE MI
 
 def sobre_mi (request):
-    context = {
+    contexto = {
         "mensaje1": "Mi nombre es María Sol Martorell, tengo 36 años y este es mi primer curso de programación.", 
         "mensaje2": "Soy Lic. en Química y Tecnología Ambiental, y busco potenciar mi desarrollo profesional metiéndome en el mundo IT",
         "mensaje3": "Un camino totalmente desconocido pero con muchas ganas de recorrerlo y aprender! Espero que sea el primero de muchos otros!"
     }
-    return render(request, "gym/sobre_mi.html", context)
+    return render(request, "gym/sobre_mi.html", contexto)
 
 
 
@@ -43,11 +43,11 @@ def actividades (request):
     if request.method == "GET":
         formulario = ActividadesFormulario()
     
-        context = {
+        contexto = {
             "actividades":actividades,
             "formulario": formulario
         }
-        return render(request, "gym/actividades/actividades.html", context)
+        return render(request, "gym/actividades/actividades.html", contexto)
 
     else:
         formulario = ActividadesFormulario(request.POST)
@@ -63,11 +63,11 @@ def actividades (request):
             actividad.save()
 
         formulario = ActividadesFormulario()
-        context = {
+        contexto = {
             "actividades": actividades,
             "formulario": formulario
         }
-        return render(request, "gym/actividades/actividades.html", context)
+        return render(request, "gym/actividades/actividades.html", contexto)
 
 @login_required
 def borrar_actividad(request, id_actividad):
@@ -111,14 +111,17 @@ def editar_actividad(request, id_actividad):
 @login_required
 def buscar_actividad(request):
 
-    actividad_nombre = request.GET.get("actividad", None)
+    if request.method == "GET":
+        actividad_nombre = request.GET.get("actividad")
 
-    if not actividad_nombre:
-        return HttpResponse("No indicaste ningún nombre")
-
-    actividades_lista = Actividades.objects.filter(nombre__icontains=actividad_nombre)
-    return render(request, "gym/actividades/actividades_resultado_busqueda.html", {"actividades": actividades_lista})
-
+        actividades_lista = Actividades.objects.filter(nombre__icontains=actividad_nombre)
+        
+        contexto = {
+            "actividades": actividades_lista,
+            "query": actividad_nombre
+        }
+        return render(request, "gym/actividades/actividades_resultado_busqueda.html", contexto)
+        
 class ActividadesDetail(DetailView):
     model = Actividades
     template_name = "gym/actividades/actividades_detalle.html"
@@ -133,11 +136,11 @@ def socios (request):
     if request.method == "GET":
         formulario = SociosFormulario()
     
-        context = {
+        contexto = {
             "socios": socios,
             "formulario": formulario
         }
-        return render(request, "gym/socios/socios.html", context)
+        return render(request, "gym/socios/socios.html", contexto)
 
     else:
         formulario = SociosFormulario(request.POST)
@@ -153,11 +156,11 @@ def socios (request):
             socio.save()
 
         formulario = SociosFormulario()
-        context = {
+        contexto = {
             "socios": socios,
             "formulario": formulario
         }
-        return render(request, "gym/socios/socios.html", context)
+        return render(request, "gym/socios/socios.html", contexto)
 
 @login_required
 def borrar_socio(request, id_socio):
@@ -202,16 +205,16 @@ def editar_socio(request, id_socio):
 @login_required
 def buscar_socio(request):
 
-    socio_nombre = request.GET.get("nombre", None)
-    
-    if not socio_nombre:
-        return HttpResponse("No indicaste ningún nombre")
+    if request.method == "GET":
+        socio_apellido = request.GET.get("socio")
 
-    socios_lista = Socios.objects.filter(nombre__icontains=socio_nombre)
-    
-    return render (request, "gym/socios/socios_resultado_busqueda.html", {"socios": socios_lista})
+        socios_lista = Socios.objects.filter(apellido__icontains=socio_apellido)
 
-
+        contexto = {
+            "socios": socios_lista,
+            "query": socio_apellido
+        }
+        return render(request, "gym/socios/socios_resultado_busqueda.html", contexto)
 
 class SociosDetail(DetailView):
     model = Socios
@@ -293,14 +296,17 @@ def editar_plan(request, id_plan):
 
 @login_required
 def buscar_plan(request):
+    
+    if request.method == "GET":
+        plan_nombre = request.GET.get("plan")
 
-    plan_nombre = request.GET.get("plan", None)
-
-    if not plan_nombre:
-        return HttpResponse("No indicaste ningún nombre")
-
-    planes_lista = Planes.objects.filter(nombre__icontains=plan_nombre)
-    return render(request, "gym/planes/planes_resultado_busqueda.html", {"planes": planes_lista})
+        planes_lista = Planes.objects.filter(nombre__icontains=plan_nombre)
+        
+        contexto = {
+            "planes": planes_lista,
+            "query": plan_nombre
+        }
+        return render(request, "gym/planes/planes_resultado_busqueda.html", contexto)
 
 class PlanesDetail(DetailView):
     model = Planes

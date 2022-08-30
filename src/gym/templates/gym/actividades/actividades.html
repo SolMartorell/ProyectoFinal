@@ -2,24 +2,15 @@
 
 {% block titulo %} Actividades {% endblock %}
 
-{% block welcome %} Actividades {% endblock %}
+{% block welcome %} <h3 style="color: orangered">Actividades</h3> {% endblock %}
 
 {% block contenido %}
 
-<br>
 <center>
-    <p>Listado de actividades disponibles:</p>
-   
- {% for actividad in actividades %} 
-            <p><strong>{{actividad.nombre}}</p></strong>
-            <a href="{%url 'detalle_actividad' actividad.id %}">Ver más -</a> 
-            <a href="{%url 'borrar_actividad' actividad.id %}">Borrar -</a> 
-            <a href="{%url 'editar_actividad' actividad.id %}">Editar</a> 
-            
-        </p>
-    {% endfor %}
     <br>
     <strong>Buscar actividades</strong>
+    <br>
+    <br>
     <form action="{% url 'buscar_actividad' %}" method="get">
 
         <p>
@@ -27,8 +18,20 @@
             <input type="text" name="actividad">
         </p>
         <input type="submit" value="Buscar">
-    <br>
+
     </form>
+    <br>
+    <p>Listado de actividades disponibles:</p>
+   
+    {% for actividad in actividades %} 
+            <p><strong>{{actividad.nombre}}</p></strong>
+            <a href="{%url 'detalle_actividad' actividad.id %}">Ver más -</a> 
+            <a href="{%url 'borrar_actividad' actividad.id %}">Borrar -</a> 
+            <a href="{%url 'editar_actividad' actividad.id %}">Editar</a> 
+            
+        </p>
+    {% endfor %}
+
     <br>
     <strong>Crear actividades</strong>
     <br>
@@ -40,6 +43,5 @@
             <input type="submit" value="Crear">
         </form>
         
-
 </center>   
 {% endblock contenido %}

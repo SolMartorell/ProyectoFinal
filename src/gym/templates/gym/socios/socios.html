@@ -2,12 +2,25 @@
 
 {% block titulo %} Socios {% endblock %}
 
-{% block welcome %} Socios {% endblock %}
+{% block welcome %} <h3 style="color: orangered">Socios</h3> {% endblock %}
 
 {% block contenido %}
 
-<br>
 <center>
+    <br>
+    <strong>Buscar socios</strong>
+    <br>
+    <br>
+    <form action="{% url 'buscar_socio' %}" method="get">
+
+        <p>
+            Indique un apellido:
+            <input type="text" name="socio">
+        </p>
+        <input type="submit" value="Buscar">
+    
+    </form>
+    <br>
     <p>Listado de socios inscriptos:</p>
 
     {% for socio in socios %}
@@ -18,18 +31,8 @@
             
         </p>
     {% endfor %}
+    
     <br>
-    <strong>Buscar socios</strong>
-    <form action="{% url 'buscar_socio' %}" method="get">
-
-        <p>
-            Indique un nombre:
-            <input type="text" name="nombre">
-        </p>
-        <input type="submit" value="Buscar">
-    <br>
-    </form>
-
     <strong>Crear socios</strong>
     <br>
     <br>
@@ -40,5 +43,5 @@
             <input type="submit" value="Crear">
         </form>
 
-</center>   
+</center>  
 {% endblock contenido %}

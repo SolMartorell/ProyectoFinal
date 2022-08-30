@@ -2,15 +2,26 @@
 
 {% block titulo %} Socios {% endblock %}
 
-{% block welcome %} Socios {% endblock %}
+{% block welcome %} <h3 style="color: orangered">Socios</h3> {% endblock %}
 
-
+{% block contenido %}
 <br>
 <center>    
+<p>Resultado de búsqueda para: {{query}}</p>
+
+{% if socios %}
+          
     {% for socio in socios %}
-        <p><strong>{{socio.nombre}}</strong> - {{socio.apellido}} - {{socio.email}}</p>
+    <p><strong>{{socio.apellido}}</strong>, {{socio.nombre}} - {{socio.email}} - Pago Cuota: {{socio.cuota_paga}}</p>
     {%endfor%}
-    <a href="{% url 'Socios' %}">Volver</a>
+    
+{% else %}
+    
+    <p><strong>No indicaste un apellido de socio válido</strong></p>
+
+{% endif %}
+    
+<a href="{% url 'Socios' %}">Volver</a>
 </center>
 
 {% endblock contenido %}

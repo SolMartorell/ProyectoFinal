@@ -10,17 +10,16 @@
 <center> 
     <br>
     {% for contacto in contactos %}
-    <p>Nombre: {{contacto.nombre}}</p>
+    <p><strong>Nombre: {{contacto.nombre}}</strong></p>
     <p>Email: {{contacto.email}}</p>
     <p>Mensaje: {{contacto.mensaje}}</p>
+    <p>Fecha envío: {{contacto.fecha_creacion}}</p>
     <a href="{% url 'borrar_contacto' contacto.id %}">Borrar</a>
     <br>
-    <br>
+    <hr>
     {% endfor %}
     <br>
-    <strong>Enviar mensaje</strong>
-    <br>
-    <br>          
+    <p style="color: orangered">Enviar mensaje</p> 
 
     <form method="post"> {% csrf_token %}
         

@@ -3,8 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from registro.forms import ContactoFormulario, UserCustomCreationForm
-from registro.forms import UserEditForm, AvatarForm
+from registro.forms import UserEditForm, AvatarForm, ContactoFormulario, UserCustomCreationForm
 from registro.models import Avatar, Contacto
 
 
@@ -97,7 +96,7 @@ def contacto (request):
             nombre = data.get("nombre")
             email = data.get("email")
             mensaje = data.get("mensaje")
-            
+                   
             contacto = Contacto(nombre=nombre, email=email, mensaje=mensaje)
             contacto.save()
 
