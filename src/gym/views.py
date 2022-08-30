@@ -2,14 +2,13 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from gym.models import Actividades, Socios, Planes
 from gym.forms import *
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic.detail import DetailView
 from registro.models import Avatar
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 
 # INICIO
-
 
 def inicio(request):
 
@@ -125,73 +124,172 @@ class ActividadesDetail(DetailView):
     template_name = "gym/actividades/actividades_detalle.html"
 
 
-
 # SOCIOS
-class SociosList(ListView):
-    model = Socios
-    template_name = "gym/socios/socios.html"
+
+@login_required
+def socios (request):
+    socios = Socios.objects.all()
+
+    if request.method == "GET":
+        formulario = SociosFormulario()
+    
+        context = {
+            "socios": socios,
+            "formulario": formulario
+        }
+        return render(request, "gym/socios/socios.html", context)
+
+    else:
+        formulario = SociosFormulario(request.POST)
+        if formulario.is_valid():        
+            data = formulario.cleaned_data
+            
+            nombre = data.get("nombre")
+            apellido = data.get("apellido")
+            email = data.get("email")
+            cuota_paga = data.get("cuota_paga")
+            
+            socio = Socios(nombre=nombre, apellido=apellido, email=email, cuota_paga=cuota_paga)
+            socio.save()
+
+        formulario = SociosFormulario()
+        context = {
+            "socios": socios,
+            "formulario": formulario
+        }
+        return render(request, "gym/socios/socios.html", context)
+
+@login_required
+def borrar_socio(request, id_socio):
+    try:
+        socio = Socios.objects.get(id=id_socio)
+        socio.delete()
+        return redirect("Socios")
+    except:
+        return redirect("Inicio")
+
+@login_required
+def editar_socio(request, id_socio):
+
+    if request.method == "GET":
+        formulario = SociosFormulario()
+        contexto = {
+            "formulario": formulario
+        }
+
+        return render(request, "gym/socios/socios_editar.html", contexto)
+    
+    else:
+        formulario = SociosFormulario(request.POST)
+
+        if formulario.is_valid():
+            data = formulario.cleaned_data
+
+            try:
+                socio= Socios.objects.get(id=id_socio)
+
+                socio.nombre = data.get("nombre")
+                socio.apellido = data.get("apellido")
+                socio.email = data.get("email")
+                socio.cuota_paga= data.get("cuota_paga")
+
+                socio.save()
+            except:
+                return HttpResponse("Error en la actualización")
+   
+        return redirect("Socios")
+
+@login_required
+def buscar_socio(request):
+
+    socio_nombre = request.GET.get("nombre", None)
+    
+    if not socio_nombre:
+        return HttpResponse("No indicaste ningún nombre")
+
+    socios_lista = Socios.objects.filter(nombre__icontains=socio_nombre)
+    
+    return render (request, "gym/socios/socios_resultado_busqueda.html", {"socios": socios_lista})
+
+
 
 class SociosDetail(DetailView):
     model = Socios
     template_name = "gym/socios/socios_detalle.html"
 
-class SociosCreate(LoginRequiredMixin, CreateView):
-    model = Socios
-    success_url = "/gym/socios/"
-    fields = ["nombre", "apellido", "email", "cuota_paga"]
-    template_name = "gym/socios/socios.html"
-
-class SociosUpdate(LoginRequiredMixin, UpdateView):
-    model = Socios
-    success_url = "/gym/socios/"
-    fields = ["nombre", "apellido", "email", "cuota_paga"]
-    template_name = "gym/socios/socios.html"
-
-class SociosDelete(LoginRequiredMixin, DeleteView):
-    model = Socios
-    success_url = "/gym/socios/"
-    template_name = "gym/socios/socios_borrar.html"
-
-@login_required
-def buscar_socio(request):
-
-    socio_apellido = request.GET.get("socio", None)
-
-    if not socio_apellido:
-        return HttpResponse("No indicaste ningún nombre")
-
-    socios_lista = Socios.objects.filter(apellido__icontains=socio_apellido)
-    return render(request, "gym/socios/socios_resultado_busqueda.html", {"socios": socios_lista})
-
 
 # PLANES
 
+@login_required
+def planes (request):
+    planes = Planes.objects.all()
 
-class PlanesList(ListView):
-    model = Planes
-    template_name = "gym/planes/planes.html"
+    if request.method == "GET":
+        formulario = PlanesFormulario()
+    
+        context = {
+            "planes": planes,
+            "formulario": formulario
+        }
+        return render(request, "gym/planes/planes.html", context)
 
-class PlanesDetail(DetailView):
-    model = Planes
-    template_name = "gym/planes/planes_detalle.html"
+    else:
+        formulario = PlanesFormulario(request.POST)
+        if formulario.is_valid():        
+            data = formulario.cleaned_data
+            
+            nombre = data.get("nombre")
+            cantidad_clases = data.get("cantidad_clases")
+            precio = data.get("precio")
+                        
+            plan = Planes(nombre=nombre, cantidad_clases=cantidad_clases, precio=precio)
+            plan.save()
 
-class PlanesCreate(LoginRequiredMixin, CreateView):
-    model = Planes
-    success_url = "/gym/planes/"
-    fields = ["nombre", "cantidad_clases", "precio"]
-    template_name = "gym/planes/planes.html"
+        formulario = PlanesFormulario()
+        context = {
+            "planes": planes,
+            "formulario": formulario
+        }
+        return render(request, "gym/planes/planes.html", context)
 
-class PlanesUpdate(LoginRequiredMixin, UpdateView):
-    model = Planes
-    success_url = "/gym/planes/"
-    fields = ["nombre", "cantidad_clases", "precio"]
-    template_name = "gym/planes/planes.html"
+@login_required
+def borrar_plan(request, id_plan):
+    try:
+        plan = Planes.objects.get(id=id_plan)
+        plan.delete()
+        return redirect("Planes")
+    except:
+        return redirect("Inicio")
 
-class PlanesDelete(LoginRequiredMixin, DeleteView):
-    model = Planes
-    success_url = "/gym/planes/"
-    template_name = "gym/planes/planes_borrar.html"
+@login_required
+def editar_plan(request, id_plan):
 
+    if request.method == "GET":
+        formulario = PlanesFormulario()
+        contexto = {
+            "formulario": formulario
+        }
+
+        return render(request, "gym/planes/planes_editar.html", contexto)
+    
+    else:
+        formulario = PlanesFormulario(request.POST)
+
+        if formulario.is_valid():
+            data = formulario.cleaned_data
+
+            try:
+                plan= Planes.objects.get(id=id_plan)
+
+                plan.nombre = data.get("nombre")
+                plan.cantidad_clases = data.get("cantidad_clases")
+                plan.precio = data.get("precio")
+
+                plan.save()
+            except:
+                return HttpResponse("Error en la actualización")
+   
+        return redirect("Planes")
 
 @login_required
 def buscar_plan(request):
@@ -203,3 +301,7 @@ def buscar_plan(request):
 
     planes_lista = Planes.objects.filter(nombre__icontains=plan_nombre)
     return render(request, "gym/planes/planes_resultado_busqueda.html", {"planes": planes_lista})
+
+class PlanesDetail(DetailView):
+    model = Planes
+    template_name = "gym/planes/planes_detalle.html"

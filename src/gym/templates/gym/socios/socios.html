@@ -9,7 +9,8 @@
 <br>
 <center>
     <p>Listado de socios inscriptos:</p>
-    {% for socio in object_list %}
+
+    {% for socio in socios %}
         <p><strong>{{socio.apellido}}, {{socio.nombre}}</p></strong>
             <a href="{%url 'detalle_socio' socio.id %}">Ver más -</a> 
             <a href="{%url 'borrar_socio' socio.id %}">Borrar -</a> 
@@ -22,8 +23,8 @@
     <form action="{% url 'buscar_socio' %}" method="get">
 
         <p>
-            Indique un apellido:
-            <input type="text" name="socio">
+            Indique un nombre:
+            <input type="text" name="nombre">
         </p>
         <input type="submit" value="Buscar">
     <br>

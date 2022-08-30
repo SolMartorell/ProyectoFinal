@@ -1,6 +1,7 @@
 from django.urls import path
 from registro.views import *
 
+
 urlpatterns = [
     path('registrarse/', registrarse, name="registrarse"),
     path("editar/", editar_usuario, name="editar_usuario"),
@@ -9,8 +10,3 @@ urlpatterns = [
     path("contacto/borrar/<id_contacto>", borrar_contacto, name="borrar_contacto")
 
 ]
-
-
-
-
-
