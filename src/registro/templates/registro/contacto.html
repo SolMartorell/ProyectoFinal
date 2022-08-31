@@ -19,14 +19,16 @@
     <hr>
     {% endfor %}
     <br>
-    <p style="color: orangered">Enviar mensaje</p> 
 
-    <form method="post"> {% csrf_token %}
+    {% block contacto %}
+    <p style="color: orangered">Enviar mensaje</p> 
+    <form method="post">{% csrf_token %}
         
         {{ formulario.as_p }}
         
         <input type="submit" value="Enviar">
     </form>
+    {% endblock %}
  
 </center>
 

@@ -12,14 +12,20 @@ from django.contrib.auth.decorators import login_required
 
 def inicio(request):
 
+    if request.user.username:
+        avatar = Avatar.objects.filter(usuario=request.user)
+
+        if len(avatar) > 0:
+            imagen = avatar[0].imagen
+        else:
+            imagen = None
+    else:
+        imagen = None
+    
     contexto = {
-        "mensaje": "Página de inicio"    
+        "mensaje": "Página de inicio",
+        "imagen": imagen    
     }
-
-    if not request.user.is_anonymous:
-        avatares = Avatar.objects.filter(usuario = request.user).last()
-        contexto.update({"avatares": avatares})
-
     return render(request, "gym/index.html", contexto)
 
 # SOBRE MI

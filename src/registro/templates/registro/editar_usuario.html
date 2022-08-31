@@ -4,8 +4,8 @@
 {% block contenido %}
 <br>
 <center>
-<h1>Editando información de {{request.user.username}}</h1>
-
+<h5>Editando información de {{request.user.username}}:</h5>
+<br>
 <form method="post">
     {% csrf_token %}
     {{form.as_p}}

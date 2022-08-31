@@ -8,5 +8,4 @@ urlpatterns = [
     path("avatar/", agregar_avatar, name="agregar_avatar"),
     path("contacto/", contacto, name= "Contacto"),
     path("contacto/borrar/<id_contacto>", borrar_contacto, name="borrar_contacto")
-
 ]
