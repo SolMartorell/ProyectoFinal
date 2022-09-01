@@ -16,7 +16,7 @@
 <center>
     <p style="color: orangered; font-size: 22px;font-weight: 100px;">Hola {{request.user}}!</p>
     <p>Ultimo inicio de sesión: {{ request.user.last_login }} <p>
-    <img src="{{imagen}}" alt="Avatar">
+    <img src="/media/{{imagen}}" width="150" height="150" alt="Avatar">
 </center>
 </div>
 {% endif %}

@@ -54,31 +54,22 @@ def editar_usuario(request):
 
 @login_required
 def agregar_avatar(request):
-
-    if request.method == "POST":
-
-        formulario = AvatarForm(request.POST,request.FILES)
+   
+    if request.method == "GET":
+        formulario = AvatarForm()
+        contexto = {"form": formulario}
+        return render(request, "registro/agregar_avatar.html", contexto)
+    else:
+        formulario = AvatarForm(request.POST, request.FILES)
 
         if formulario.is_valid():
+            data = formulario.cleaned_data
 
-            usuario = request.user
+            usuario = User.objects.filter(username=request.user.username).first()
+            avatar = Avatar(usuario=usuario,imagen=data["imagen"])
 
-            avatar = Avatar.objects.filter(usuario=usuario)
-
-            if len(avatar) > 0:
-                avatar = avatar[0]
-                avatar.imagen = formulario.cleaned_data["imagen"]
-                avatar.save()
-
-            else:
-                avatar = Avatar(user=usuario, imagen=formulario.cleaned_data["imagen"])
-                avatar.save()
-            
-        return redirect("Inicio")
-    else:
-
-        formulario = AvatarForm()
-  
+            avatar.save()
+            return redirect("Inicio")
         contexto = {"form": formulario}
         return render(request, "registro/agregar_avatar.html", contexto)
 

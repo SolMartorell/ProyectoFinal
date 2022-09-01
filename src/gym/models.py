@@ -16,7 +16,7 @@ class Socios(models.Model):
     nombre = models.CharField(max_length=30)
     apellido = models.CharField(max_length=30)
     email = models.EmailField(null= True)
-    cuota_paga = models.BooleanField()
+    cuota_paga = models.BooleanField(null=True)
 
     class Meta:
         verbose_name = "Socios"
