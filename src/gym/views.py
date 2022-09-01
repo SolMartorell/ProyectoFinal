@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from gym.models import Actividades, Socios, Planes
@@ -12,8 +13,11 @@ from django.contrib.auth.decorators import login_required
 
 def inicio(request):
     
+    date = datetime.now()
+    
     contexto = {
         "mensaje": "Página de inicio",
+        "date": date 
     }
 
     if not request.user.is_anonymous:
@@ -30,6 +34,11 @@ def sobre_mi (request):
         "mensaje2": "Soy Lic. en Química y Tecnología Ambiental, y busco potenciar mi desarrollo profesional metiéndome en el mundo IT",
         "mensaje3": "Un camino totalmente desconocido pero con muchas ganas de recorrerlo y aprender! Espero que sea el primero de muchos otros!"
     }
+
+    if not request.user.is_anonymous:
+        avatar = Avatar.objects.filter(usuario = request.user).last()
+        contexto.update({"imagen": avatar.imagen})
+
     return render(request, "gym/sobre_mi.html", contexto)
 
 
@@ -47,6 +56,11 @@ def actividades (request):
             "actividades":actividades,
             "formulario": formulario
         }
+
+        if not request.user.is_anonymous:
+            avatar = Avatar.objects.filter(usuario = request.user).last()
+            contexto.update({"imagen": avatar.imagen})
+
         return render(request, "gym/actividades/actividades.html", contexto)
 
     else:
@@ -67,6 +81,7 @@ def actividades (request):
             "actividades": actividades,
             "formulario": formulario
         }
+
         return render(request, "gym/actividades/actividades.html", contexto)
 
 @login_required
@@ -140,6 +155,10 @@ def socios (request):
             "socios": socios,
             "formulario": formulario
         }
+        if not request.user.is_anonymous:
+            avatar = Avatar.objects.filter(usuario = request.user).last()
+            contexto.update({"imagen": avatar.imagen})
+
         return render(request, "gym/socios/socios.html", contexto)
 
     else:
@@ -230,11 +249,15 @@ def planes (request):
     if request.method == "GET":
         formulario = PlanesFormulario()
     
-        context = {
+        contexto = {
             "planes": planes,
             "formulario": formulario
         }
-        return render(request, "gym/planes/planes.html", context)
+        if not request.user.is_anonymous:
+            avatar = Avatar.objects.filter(usuario = request.user).last()
+            contexto.update({"imagen": avatar.imagen})
+
+        return render(request, "gym/planes/planes.html", contexto)
 
     else:
         formulario = PlanesFormulario(request.POST)
@@ -249,11 +272,11 @@ def planes (request):
             plan.save()
 
         formulario = PlanesFormulario()
-        context = {
+        contexto = {
             "planes": planes,
             "formulario": formulario
         }
-        return render(request, "gym/planes/planes.html", context)
+        return render(request, "gym/planes/planes.html", contexto)
 
 @login_required
 def borrar_plan(request, id_plan):

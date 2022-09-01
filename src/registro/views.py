@@ -81,11 +81,16 @@ def contacto (request):
     if request.method == "GET":
         formulario = ContactoFormulario()
 
-        context = {
+        contexto = {
             "contactos": contactos,
             "formulario": formulario
         }
-        return render(request, "registro/contacto.html", context)
+
+        if not request.user.is_anonymous:
+            avatar = Avatar.objects.filter(usuario = request.user).last()
+            contexto.update({"imagen": avatar.imagen})
+
+        return render(request, "registro/contacto.html", contexto)
 
     else:
         formulario = ContactoFormulario(request.POST)
@@ -100,11 +105,11 @@ def contacto (request):
             contacto.save()
 
         formulario = ContactoFormulario()
-        context = {
+        contexto = {
             "contactos": contactos,
             "formulario": formulario
         }
-        return render(request, "registro/contacto.html", context)
+        return render(request, "registro/contacto.html", contexto)
 
 @login_required
 def borrar_contacto(request, id_contacto):
