@@ -1,6 +1,4 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from registro.forms import UserEditForm, AvatarForm, ContactoFormulario, UserCustomCreationForm
@@ -31,7 +29,16 @@ def editar_usuario(request):
 
     if request.method == "GET":
         form = UserEditForm(initial={"first_name": request.user.first_name, "last_name": request.user.last_name, "email": request.user.email})
-        return render(request, "registro/editar_usuario.html", {"form": form})
+        
+        contexto={
+            "form": form
+        }
+
+        if not request.user.is_anonymous:
+            avatar = Avatar.objects.filter(usuario = request.user).last()
+            contexto.update({"imagen": avatar.imagen})
+
+        return render(request, "registro/editar_usuario.html", contexto)
     else:
         form = UserEditForm(request.POST)
 
@@ -58,6 +65,11 @@ def agregar_avatar(request):
     if request.method == "GET":
         formulario = AvatarForm()
         contexto = {"form": formulario}
+
+        if not request.user.is_anonymous:
+            avatar = Avatar.objects.filter(usuario = request.user).last()
+            contexto.update({"imagen": avatar.imagen})
+
         return render(request, "registro/agregar_avatar.html", contexto)
     else:
         formulario = AvatarForm(request.POST, request.FILES)
@@ -109,6 +121,11 @@ def contacto (request):
             "contactos": contactos,
             "formulario": formulario
         }
+
+        if not request.user.is_anonymous:
+            avatar = Avatar.objects.filter(usuario = request.user).last()
+            contexto.update({"imagen": avatar.imagen})
+
         return render(request, "registro/contacto.html", contexto)
 
 @login_required
@@ -119,3 +136,4 @@ def borrar_contacto(request, id_contacto):
         return redirect("Contacto")
     except:
         return redirect("Inicio")
+

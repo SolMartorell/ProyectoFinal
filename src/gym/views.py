@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from gym.models import Actividades, Socios, Planes
 from gym.forms import *
-from django.views.generic.detail import DetailView
 from registro.models import Avatar
 from django.contrib.auth.decorators import login_required
 
@@ -22,16 +21,17 @@ def inicio(request):
 
     if not request.user.is_anonymous:
         avatar = Avatar.objects.filter(usuario = request.user).last()
-        contexto.update({"imagen": avatar.imagen})
+        contexto.update({"imagen": avatar.imagen})        
 
     return render(request, "gym/index.html", contexto)
+
 
 # SOBRE MI
 
 def sobre_mi (request):
     contexto = {
         "mensaje1": "Mi nombre es María Sol Martorell, tengo 36 años y este es mi primer curso de programación.", 
-        "mensaje2": "Soy Lic. en Química y Tecnología Ambiental, y busco potenciar mi desarrollo profesional metiéndome en el mundo IT",
+        "mensaje2": "Soy Lic. en Química y Tecnología Ambiental, y busco potenciar mi desarrollo profesional metiéndome en el mundo IT.",
         "mensaje3": "Un camino totalmente desconocido pero con muchas ganas de recorrerlo y aprender! Espero que sea el primero de muchos otros!"
     }
 
@@ -40,7 +40,6 @@ def sobre_mi (request):
         contexto.update({"imagen": avatar.imagen})
 
     return render(request, "gym/sobre_mi.html", contexto)
-
 
 
 # ACTIVIDADES
@@ -84,6 +83,7 @@ def actividades (request):
 
         return render(request, "gym/actividades/actividades.html", contexto)
 
+
 @login_required
 def borrar_actividad(request, id_actividad):
     try:
@@ -93,6 +93,7 @@ def borrar_actividad(request, id_actividad):
     except:
         return redirect("Inicio")
 
+
 @login_required
 def editar_actividad(request, id_actividad):
 
@@ -101,6 +102,10 @@ def editar_actividad(request, id_actividad):
         contexto = {
             "formulario": formulario
         }
+
+        if not request.user.is_anonymous:
+            avatar = Avatar.objects.filter(usuario = request.user).last()
+            contexto.update({"imagen": avatar.imagen})
 
         return render(request, "gym/actividades/actividades_editar.html", contexto)
     
@@ -123,6 +128,7 @@ def editar_actividad(request, id_actividad):
    
         return redirect("Actividades")
 
+
 @login_required
 def buscar_actividad(request):
 
@@ -135,11 +141,28 @@ def buscar_actividad(request):
             "actividades": actividades_lista,
             "query": actividad_nombre
         }
+
+        if not request.user.is_anonymous:
+            avatar = Avatar.objects.filter(usuario = request.user).last()
+            contexto.update({"imagen": avatar.imagen})
+
         return render(request, "gym/actividades/actividades_resultado_busqueda.html", contexto)
         
-class ActividadesDetail(DetailView):
-    model = Actividades
-    template_name = "gym/actividades/actividades_detalle.html"
+
+@login_required
+def actividades_detalle(request,pk):
+    
+    actividad_id = Actividades.objects.get(pk=pk)
+
+    contexto ={
+        "actividad": actividad_id,
+    }
+
+    if not request.user.is_anonymous:
+        avatar = Avatar.objects.filter(usuario = request.user).last()
+        contexto.update({"imagen": avatar.imagen})
+
+    return render(request, "gym/actividades/actividades_detalle.html", contexto)
 
 
 # SOCIOS
@@ -155,6 +178,7 @@ def socios (request):
             "socios": socios,
             "formulario": formulario
         }
+
         if not request.user.is_anonymous:
             avatar = Avatar.objects.filter(usuario = request.user).last()
             contexto.update({"imagen": avatar.imagen})
@@ -179,7 +203,9 @@ def socios (request):
             "socios": socios,
             "formulario": formulario
         }
+
         return render(request, "gym/socios/socios.html", contexto)
+
 
 @login_required
 def borrar_socio(request, id_socio):
@@ -190,6 +216,7 @@ def borrar_socio(request, id_socio):
     except:
         return redirect("Inicio")
 
+
 @login_required
 def editar_socio(request, id_socio):
 
@@ -198,7 +225,11 @@ def editar_socio(request, id_socio):
         contexto = {
             "formulario": formulario
         }
-
+        
+        if not request.user.is_anonymous:
+            avatar = Avatar.objects.filter(usuario = request.user).last()
+            contexto.update({"imagen": avatar.imagen})
+        
         return render(request, "gym/socios/socios_editar.html", contexto)
     
     else:
@@ -221,6 +252,7 @@ def editar_socio(request, id_socio):
    
         return redirect("Socios")
 
+
 @login_required
 def buscar_socio(request):
 
@@ -233,11 +265,28 @@ def buscar_socio(request):
             "socios": socios_lista,
             "query": socio_apellido
         }
+
+        if not request.user.is_anonymous:
+            avatar = Avatar.objects.filter(usuario = request.user).last()
+            contexto.update({"imagen": avatar.imagen})
+
         return render(request, "gym/socios/socios_resultado_busqueda.html", contexto)
 
-class SociosDetail(DetailView):
-    model = Socios
-    template_name = "gym/socios/socios_detalle.html"
+
+@login_required
+def socios_detalle(request,pk):
+    
+    socio_id = Socios.objects.get(pk=pk)
+
+    contexto ={
+        "socio": socio_id,
+    }
+
+    if not request.user.is_anonymous:
+        avatar = Avatar.objects.filter(usuario = request.user).last()
+        contexto.update({"imagen": avatar.imagen})
+
+    return render(request, "gym/socios/socios_detalle.html", contexto)
 
 
 # PLANES
@@ -253,6 +302,7 @@ def planes (request):
             "planes": planes,
             "formulario": formulario
         }
+        
         if not request.user.is_anonymous:
             avatar = Avatar.objects.filter(usuario = request.user).last()
             contexto.update({"imagen": avatar.imagen})
@@ -276,7 +326,9 @@ def planes (request):
             "planes": planes,
             "formulario": formulario
         }
+        
         return render(request, "gym/planes/planes.html", contexto)
+
 
 @login_required
 def borrar_plan(request, id_plan):
@@ -287,6 +339,7 @@ def borrar_plan(request, id_plan):
     except:
         return redirect("Inicio")
 
+
 @login_required
 def editar_plan(request, id_plan):
 
@@ -295,7 +348,11 @@ def editar_plan(request, id_plan):
         contexto = {
             "formulario": formulario
         }
-
+        
+        if not request.user.is_anonymous:
+            avatar = Avatar.objects.filter(usuario = request.user).last()
+            contexto.update({"imagen": avatar.imagen})
+        
         return render(request, "gym/planes/planes_editar.html", contexto)
     
     else:
@@ -317,6 +374,7 @@ def editar_plan(request, id_plan):
    
         return redirect("Planes")
 
+
 @login_required
 def buscar_plan(request):
     
@@ -329,8 +387,25 @@ def buscar_plan(request):
             "planes": planes_lista,
             "query": plan_nombre
         }
+
+        if not request.user.is_anonymous:
+            avatar = Avatar.objects.filter(usuario = request.user).last()
+            contexto.update({"imagen": avatar.imagen})
+        
         return render(request, "gym/planes/planes_resultado_busqueda.html", contexto)
 
-class PlanesDetail(DetailView):
-    model = Planes
-    template_name = "gym/planes/planes_detalle.html"
+
+@login_required
+def planes_detalle(request,pk):
+    
+    plan_id = Planes.objects.get(pk=pk)
+
+    contexto ={
+        "plan": plan_id,
+    }
+
+    if not request.user.is_anonymous:
+        avatar = Avatar.objects.filter(usuario = request.user).last()
+        contexto.update({"imagen": avatar.imagen})
+
+    return render(request, "gym/planes/planes_detalle.html", contexto)

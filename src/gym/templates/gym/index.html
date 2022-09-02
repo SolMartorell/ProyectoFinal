@@ -8,17 +8,25 @@
 <br>
 <center> 
   <h4>- {{mensaje}} -</h4>
-</center>
+
 
 {% if request.user.is_authenticated %}
 <div class="container">
 <br>
-<center>
     <p style="color: orangered; font-size: 22px;font-weight: 100px;">Hola {{request.user}}!</p>
     <p>{{ date }}</p>
     <p>Ultimo inicio de sesión: {{ request.user.last_login }}<p>
     <img src="/media/{{imagen}}" width="150" height="150" alt="Avatar">
-</center>
+
 </div>
+
+{% else %}
+<div class="container">
+  <br>
+      <p style="color: orangered; font-size: 22px;font-weight: 100px;">Hola {{request.user}}!</p>
+      <p>{{ date }}</p>
+  </div>
+
 {% endif %}
+</center>
 {% endblock %}
