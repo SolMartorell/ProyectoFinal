@@ -21,5 +21,7 @@ La aplicación "registro" permite registrar un usuario de la página, agregar/ca
 Para registrar un usuario pulsar el botón "Registrarse" de la barra de navegación.
 Para mandar mensajes al desarrollador, una vez logueado, ingresar a "Contacto". Allí se  visualizan los mensajes existentes, y se pueden enviar nuevos y también borrarlos.
 
-Ingresando al siguiente link podrás ver una presentación del funcionamiento de la página: 
+Ingresando al siguiente link podrás ver una presentación del funcionamiento de la página:
+https://drive.google.com/file/d/1fYw9T_UR5nWYUo4E-Lrj9u2fB5SU_XT6/view?usp=sharing
+
 Ingresando al siguiente link podrás ver una plantilla con los casos de prueba del UNIT TEST: 

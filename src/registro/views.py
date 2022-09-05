@@ -10,40 +10,51 @@ def registrarse(request):
 
     if request.method == "GET":
         formulario = UserCustomCreationForm()
-        return render(request, "registro/registrarse.html", {"form": formulario})
+        contexto = {
+            "form": formulario
+            }
+        return render(request, "registro/registrarse.html", contexto)
     else:
         formulario = UserCustomCreationForm(request.POST)
         if formulario.is_valid():
             formulario.save()
             return redirect("Inicio")
         else:
-            context = {
+            contexto = {
                 "error": "FORMULARIO NO VALIDO",
                 "form": formulario
             }
-            return render(request, "registro/registrarse.html", context)
+            return render(request, "registro/registrarse.html", contexto)
 
 
 @login_required
 def editar_usuario(request):
 
     if request.method == "GET":
-        form = UserEditForm(initial={"first_name": request.user.first_name, "last_name": request.user.last_name, "email": request.user.email})
+        formulario= UserEditForm(initial={"first_name": request.user.first_name, "last_name": request.user.last_name, "email": request.user.email})
         
-        contexto={
-            "form": form
+        if request.user.username:
+            avatar = Avatar.objects.filter(usuario=request.user)
+
+            if len(avatar) > 0:
+                imagen = avatar[0].imagen
+            else:
+                imagen = None
+        else:
+            imagen = None
+    
+        contexto = {
+            "formulario": formulario,
+            "imagen": imagen
         }
 
-        if not request.user.is_anonymous:
-            avatar = Avatar.objects.filter(usuario = request.user).last()
-            contexto.update({"imagen": avatar.imagen})
-
         return render(request, "registro/editar_usuario.html", contexto)
+    
     else:
-        form = UserEditForm(request.POST)
+        formulario = UserEditForm(request.POST)
 
-        if form.is_valid():
-            data = form.cleaned_data
+        if formulario.is_valid():
+            data = formulario.cleaned_data
 
             usuario = request.user
 
@@ -55,36 +66,43 @@ def editar_usuario(request):
 
             usuario.save()
             return redirect("Inicio")
+        
         else:
-            return render(request, "registro/editar_usuario.html", {"form": form})
+            return render(request, "registro/editar_usuario.html", {"formulario": formulario})
 
 
 @login_required
 def agregar_avatar(request):
    
-    if request.method == "GET":
-        formulario = AvatarForm()
-        contexto = {"form": formulario}
-
-        if not request.user.is_anonymous:
-            avatar = Avatar.objects.filter(usuario = request.user).last()
-            contexto.update({"imagen": avatar.imagen})
-
-        return render(request, "registro/agregar_avatar.html", contexto)
-    else:
+    if request.method == "POST":
+        
         formulario = AvatarForm(request.POST, request.FILES)
 
         if formulario.is_valid():
-            data = formulario.cleaned_data
+            
+            usuario = request.user
+            avatar = Avatar.objects.filter(usuario=usuario)
 
-            usuario = User.objects.filter(username=request.user.username).first()
-            avatar = Avatar(usuario=usuario,imagen=data["imagen"])
+            if len(avatar) > 0:
+                avatar = avatar[0]
+                avatar.imagen = formulario.cleaned_data["imagen"]
+                avatar.save()
+            
+            else:
+                avatar = Avatar(usuario=usuario, imagen=formulario.cleaned_data["imagen"])
+                avatar.save()
+        
+        return redirect("Inicio")
 
-            avatar.save()
-            return redirect("Inicio")
-        contexto = {"form": formulario}
+    else:
+        formulario = AvatarForm()
+
+        contexto = {
+            "formulario": formulario
+        }
+
         return render(request, "registro/agregar_avatar.html", contexto)
-
+    
 
 @login_required
 def contacto (request):
@@ -93,15 +111,22 @@ def contacto (request):
     if request.method == "GET":
         formulario = ContactoFormulario()
 
+        if request.user.username:
+            avatar = Avatar.objects.filter(usuario=request.user)
+
+            if len(avatar) > 0:
+                imagen = avatar[0].imagen
+            else:
+                imagen = None
+        else:
+            imagen = None
+    
         contexto = {
             "contactos": contactos,
-            "formulario": formulario
+            "formulario": formulario,
+            "imagen": imagen
         }
-
-        if not request.user.is_anonymous:
-            avatar = Avatar.objects.filter(usuario = request.user).last()
-            contexto.update({"imagen": avatar.imagen})
-
+        
         return render(request, "registro/contacto.html", contexto)
 
     else:
@@ -117,15 +142,23 @@ def contacto (request):
             contacto.save()
 
         formulario = ContactoFormulario()
+        
+        if request.user.username:
+            avatar = Avatar.objects.filter(usuario=request.user)
+
+            if len(avatar) > 0:
+                imagen = avatar[0].imagen
+            else:
+                imagen = None
+        else:
+            imagen = None
+    
         contexto = {
             "contactos": contactos,
-            "formulario": formulario
+            "formulario": formulario,
+            "imagen": imagen
         }
-
-        if not request.user.is_anonymous:
-            avatar = Avatar.objects.filter(usuario = request.user).last()
-            contexto.update({"imagen": avatar.imagen})
-
+        
         return render(request, "registro/contacto.html", contexto)
 
 @login_required

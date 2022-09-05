@@ -14,31 +14,45 @@ def inicio(request):
     
     date = datetime.now()
     
-    contexto = {
+    if request.user.username:
+        avatar = Avatar.objects.filter(usuario=request.user)
+
+        if len(avatar) > 0:
+            imagen = avatar[0].imagen
+        else:
+            imagen = None
+    else:
+        imagen = None
+    
+    contexto= {
         "mensaje": "Página de inicio",
-        "date": date 
+        "date": date,
+        "imagen": imagen
     }
 
-    if not request.user.is_anonymous:
-        avatar = Avatar.objects.filter(usuario = request.user).last()
-        contexto.update({"imagen": avatar.imagen})        
-
     return render(request, "gym/index.html", contexto)
-
+    
 
 # SOBRE MI
 
 def sobre_mi (request):
+
+    if request.user.username:
+        avatar = Avatar.objects.filter(usuario=request.user)
+
+        if len(avatar) > 0:
+            imagen = avatar[0].imagen
+        else:
+            imagen = None
+    else:
+        imagen = None
+    
     contexto = {
         "mensaje1": "Mi nombre es María Sol Martorell, tengo 36 años y este es mi primer curso de programación.", 
         "mensaje2": "Soy Lic. en Química y Tecnología Ambiental, y busco potenciar mi desarrollo profesional metiéndome en el mundo IT.",
-        "mensaje3": "Un camino totalmente desconocido pero con muchas ganas de recorrerlo y aprender! Espero que sea el primero de muchos otros!"
-    }
-
-    if not request.user.is_anonymous:
-        avatar = Avatar.objects.filter(usuario = request.user).last()
-        contexto.update({"imagen": avatar.imagen})
-
+        "mensaje3": "Un camino totalmente desconocido pero con muchas ganas de recorrerlo y aprender! Espero que sea el primero de muchos otros!",
+        "imagen": imagen}
+        
     return render(request, "gym/sobre_mi.html", contexto)
 
 
@@ -50,15 +64,22 @@ def actividades (request):
 
     if request.method == "GET":
         formulario = ActividadesFormulario()
+
+        if request.user.username:
+            avatar = Avatar.objects.filter(usuario=request.user)
+
+            if len(avatar) > 0:
+                imagen = avatar[0].imagen
+            else:
+                imagen = None
+        else:
+            imagen = None
     
         contexto = {
             "actividades":actividades,
-            "formulario": formulario
+            "formulario": formulario,
+            "imagen": imagen
         }
-
-        if not request.user.is_anonymous:
-            avatar = Avatar.objects.filter(usuario = request.user).last()
-            contexto.update({"imagen": avatar.imagen})
 
         return render(request, "gym/actividades/actividades.html", contexto)
 
@@ -76,9 +97,21 @@ def actividades (request):
             actividad.save()
 
         formulario = ActividadesFormulario()
+
+        if request.user.username:
+            avatar = Avatar.objects.filter(usuario=request.user)
+
+            if len(avatar) > 0:
+                imagen = avatar[0].imagen
+            else:
+                imagen = None
+        else:
+            imagen = None
+    
         contexto = {
-            "actividades": actividades,
-            "formulario": formulario
+            "actividades":actividades,
+            "formulario": formulario,
+            "imagen": imagen
         }
 
         return render(request, "gym/actividades/actividades.html", contexto)
@@ -99,14 +132,22 @@ def editar_actividad(request, id_actividad):
 
     if request.method == "GET":
         formulario = ActividadesFormulario()
+
+        if request.user.username:
+            avatar = Avatar.objects.filter(usuario=request.user)
+
+            if len(avatar) > 0:
+                imagen = avatar[0].imagen
+            else:
+                imagen = None
+        else:
+            imagen = None
+    
         contexto = {
-            "formulario": formulario
+            "formulario": formulario,
+            "imagen": imagen
         }
-
-        if not request.user.is_anonymous:
-            avatar = Avatar.objects.filter(usuario = request.user).last()
-            contexto.update({"imagen": avatar.imagen})
-
+        
         return render(request, "gym/actividades/actividades_editar.html", contexto)
     
     else:
@@ -137,14 +178,21 @@ def buscar_actividad(request):
 
         actividades_lista = Actividades.objects.filter(nombre__icontains=actividad_nombre)
         
+        if request.user.username:
+            avatar = Avatar.objects.filter(usuario=request.user)
+
+            if len(avatar) > 0:
+                imagen = avatar[0].imagen
+            else:
+                imagen = None
+        else:
+            imagen = None
+    
         contexto = {
             "actividades": actividades_lista,
-            "query": actividad_nombre
+            "query": actividad_nombre,
+            "imagen": imagen
         }
-
-        if not request.user.is_anonymous:
-            avatar = Avatar.objects.filter(usuario = request.user).last()
-            contexto.update({"imagen": avatar.imagen})
 
         return render(request, "gym/actividades/actividades_resultado_busqueda.html", contexto)
         
@@ -154,14 +202,21 @@ def actividades_detalle(request,pk):
     
     actividad_id = Actividades.objects.get(pk=pk)
 
-    contexto ={
+    if request.user.username:
+        avatar = Avatar.objects.filter(usuario=request.user)
+
+        if len(avatar) > 0:
+            imagen = avatar[0].imagen
+        else:
+            imagen = None
+    else:
+        imagen = None
+    
+    contexto = {
         "actividad": actividad_id,
+        "imagen": imagen
     }
-
-    if not request.user.is_anonymous:
-        avatar = Avatar.objects.filter(usuario = request.user).last()
-        contexto.update({"imagen": avatar.imagen})
-
+            
     return render(request, "gym/actividades/actividades_detalle.html", contexto)
 
 
@@ -173,15 +228,22 @@ def socios (request):
 
     if request.method == "GET":
         formulario = SociosFormulario()
+
+        if request.user.username:
+            avatar = Avatar.objects.filter(usuario=request.user)
+
+            if len(avatar) > 0:
+                imagen = avatar[0].imagen
+            else:
+                imagen = None
+        else:
+            imagen = None
     
         contexto = {
             "socios": socios,
-            "formulario": formulario
+            "formulario": formulario,
+            "imagen": imagen
         }
-
-        if not request.user.is_anonymous:
-            avatar = Avatar.objects.filter(usuario = request.user).last()
-            contexto.update({"imagen": avatar.imagen})
 
         return render(request, "gym/socios/socios.html", contexto)
 
@@ -199,9 +261,21 @@ def socios (request):
             socio.save()
 
         formulario = SociosFormulario()
+        
+        if request.user.username:
+            avatar = Avatar.objects.filter(usuario=request.user)
+
+            if len(avatar) > 0:
+                imagen = avatar[0].imagen
+            else:
+                imagen = None
+        else:
+            imagen = None
+    
         contexto = {
             "socios": socios,
-            "formulario": formulario
+            "formulario": formulario,
+            "imagen": imagen
         }
 
         return render(request, "gym/socios/socios.html", contexto)
@@ -222,14 +296,21 @@ def editar_socio(request, id_socio):
 
     if request.method == "GET":
         formulario = SociosFormulario()
+        if request.user.username:
+            avatar = Avatar.objects.filter(usuario=request.user)
+
+            if len(avatar) > 0:
+                imagen = avatar[0].imagen
+            else:
+                imagen = None
+        else:
+            imagen = None
+    
         contexto = {
-            "formulario": formulario
+            "formulario": formulario,
+            "imagen": imagen
         }
-        
-        if not request.user.is_anonymous:
-            avatar = Avatar.objects.filter(usuario = request.user).last()
-            contexto.update({"imagen": avatar.imagen})
-        
+
         return render(request, "gym/socios/socios_editar.html", contexto)
     
     else:
@@ -261,14 +342,21 @@ def buscar_socio(request):
 
         socios_lista = Socios.objects.filter(apellido__icontains=socio_apellido)
 
+        if request.user.username:
+            avatar = Avatar.objects.filter(usuario=request.user)
+
+            if len(avatar) > 0:
+                imagen = avatar[0].imagen
+            else:
+                imagen = None
+        else:
+            imagen = None
+    
         contexto = {
             "socios": socios_lista,
-            "query": socio_apellido
+            "query": socio_apellido,
+            "imagen": imagen
         }
-
-        if not request.user.is_anonymous:
-            avatar = Avatar.objects.filter(usuario = request.user).last()
-            contexto.update({"imagen": avatar.imagen})
 
         return render(request, "gym/socios/socios_resultado_busqueda.html", contexto)
 
@@ -278,14 +366,21 @@ def socios_detalle(request,pk):
     
     socio_id = Socios.objects.get(pk=pk)
 
-    contexto ={
+    if request.user.username:
+        avatar = Avatar.objects.filter(usuario=request.user)
+
+        if len(avatar) > 0:
+            imagen = avatar[0].imagen
+        else:
+            imagen = None
+    else:
+        imagen = None
+    
+    contexto = {
         "socio": socio_id,
+        "imagen": imagen
     }
-
-    if not request.user.is_anonymous:
-        avatar = Avatar.objects.filter(usuario = request.user).last()
-        contexto.update({"imagen": avatar.imagen})
-
+      
     return render(request, "gym/socios/socios_detalle.html", contexto)
 
 
@@ -297,16 +392,23 @@ def planes (request):
 
     if request.method == "GET":
         formulario = PlanesFormulario()
-    
+
+        if request.user.username:
+            avatar = Avatar.objects.filter(usuario=request.user)
+
+            if len(avatar) > 0:
+                imagen = avatar[0].imagen
+            else:
+                imagen = None
+        else:
+            imagen = None
+
         contexto = {
             "planes": planes,
-            "formulario": formulario
+            "formulario": formulario,
+            "imagen": imagen
         }
         
-        if not request.user.is_anonymous:
-            avatar = Avatar.objects.filter(usuario = request.user).last()
-            contexto.update({"imagen": avatar.imagen})
-
         return render(request, "gym/planes/planes.html", contexto)
 
     else:
@@ -322,9 +424,21 @@ def planes (request):
             plan.save()
 
         formulario = PlanesFormulario()
+        
+        if request.user.username:
+            avatar = Avatar.objects.filter(usuario=request.user)
+
+            if len(avatar) > 0:
+                imagen = avatar[0].imagen
+            else:
+                imagen = None
+        else:
+            imagen = None
+
         contexto = {
             "planes": planes,
-            "formulario": formulario
+            "formulario": formulario,
+            "imagen": imagen
         }
         
         return render(request, "gym/planes/planes.html", contexto)
@@ -345,14 +459,21 @@ def editar_plan(request, id_plan):
 
     if request.method == "GET":
         formulario = PlanesFormulario()
+        
+        if request.user.username:
+            avatar = Avatar.objects.filter(usuario=request.user)
+
+            if len(avatar) > 0:
+                imagen = avatar[0].imagen
+            else:
+                imagen = None
+        else:
+            imagen = None
+    
         contexto = {
-            "formulario": formulario
+            "formulario": formulario,
+            "imagen": imagen
         }
-        
-        if not request.user.is_anonymous:
-            avatar = Avatar.objects.filter(usuario = request.user).last()
-            contexto.update({"imagen": avatar.imagen})
-        
         return render(request, "gym/planes/planes_editar.html", contexto)
     
     else:
@@ -383,15 +504,22 @@ def buscar_plan(request):
 
         planes_lista = Planes.objects.filter(nombre__icontains=plan_nombre)
         
+        if request.user.username:
+            avatar = Avatar.objects.filter(usuario=request.user)
+
+            if len(avatar) > 0:
+                imagen = avatar[0].imagen
+            else:
+                imagen = None
+        else:
+            imagen = None
+    
         contexto = {
             "planes": planes_lista,
-            "query": plan_nombre
+            "query": plan_nombre,
+            "imagen": imagen
         }
 
-        if not request.user.is_anonymous:
-            avatar = Avatar.objects.filter(usuario = request.user).last()
-            contexto.update({"imagen": avatar.imagen})
-        
         return render(request, "gym/planes/planes_resultado_busqueda.html", contexto)
 
 
@@ -400,12 +528,19 @@ def planes_detalle(request,pk):
     
     plan_id = Planes.objects.get(pk=pk)
 
-    contexto ={
+    if request.user.username:
+        avatar = Avatar.objects.filter(usuario=request.user)
+
+        if len(avatar) > 0:
+            imagen = avatar[0].imagen
+        else:
+            imagen = None
+    else:
+        imagen = None
+    
+    contexto = {
         "plan": plan_id,
+        "imagen": imagen
     }
-
-    if not request.user.is_anonymous:
-        avatar = Avatar.objects.filter(usuario = request.user).last()
-        contexto.update({"imagen": avatar.imagen})
-
+    
     return render(request, "gym/planes/planes_detalle.html", contexto)

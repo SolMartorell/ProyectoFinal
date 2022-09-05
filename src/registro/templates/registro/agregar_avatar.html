@@ -1,5 +1,8 @@
 {% extends 'gym/base.html' %}
 
+{% block titulo %} Cambiar avatar {% endblock %}
+
+{% block welcome %} Cambiar avatar {% endblock %}
 
 {% block contenido %}
 <br>
@@ -8,7 +11,7 @@
 
     {% csrf_token %}
 
-    {{ form.as_p }}
+    {{ formulario.as_p }}
     
     <input type="submit" value="Cargar">
 </form>

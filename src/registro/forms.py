@@ -9,6 +9,7 @@ class UserCustomCreationForm(UserCreationForm):
     email = EmailField()
     password1 = CharField(label="Contraseña", widget=PasswordInput)
     password2 = CharField(label="Confirmar contraseña", widget=PasswordInput)
+    
 
     class Meta:
         model = User

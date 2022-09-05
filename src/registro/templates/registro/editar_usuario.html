@@ -1,14 +1,18 @@
 {% extends 'gym/base.html' %}
 
+{% block titulo %} Editar usuario {% endblock %}
+
+{% block welcome %} Editar usuario {% endblock %}
 
 {% block contenido %}
 <br>
 <center>
-<h5>Editando información de {{request.user.username}}:</h5>
+<h5>Editando información de: <strong>{{request.user.username}}</strong></h5>
 <br>
 <form method="post">
     {% csrf_token %}
-    {{form.as_p}}
+    
+    {{formulario.as_p}}
     <input type="submit" value="Editar">
 
 </form>
